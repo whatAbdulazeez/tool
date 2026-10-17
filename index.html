@@ -88,6 +88,11 @@ select{border:1px solid var(--bd);background:var(--bg);border-radius:10px;paddin
   </div>
 
   <div class="card">
+    <h2>Foley catheter</h2>
+    <div class="row" id="foley"></div>
+  </div>
+
+  <div class="card">
     <h2>Monitor</h2>
     <div class="row" id="mon"></div>
   </div>
@@ -320,6 +325,18 @@ function renderLines(){
     }};
   });
 }
+function renderFoley(){
+  var c=document.getElementById("foley"),pre="",last="",isOpen=false,s;
+  resetFns.push(function(){pre="";last="";isOpen=false;if(s)s.selectedIndex=0});
+  s=mkSel(c,"Foley catheter",["Foley catheter 14 FR","Foley catheter 16 FR","Foley catheter 18 FR","Foley catheter 20 FR"],function(){
+    if(!s.value){if(isOpen)removeText(pre+last);pre="";last="";isOpen=false;return}
+    var n="pt have "+s.value+" connected to Urobag";
+    if(!isOpen){pre=insertComma(n);last=n;isOpen=true;return}
+    var k=out.value.indexOf(pre+last);
+    if(k>=0){out.value=out.value.slice(0,k)+pre+n+out.value.slice(k+pre.length+last.length)}
+    last=n;
+  });
+}
 function renderShift(){
   var c=document.getElementById("shift");
   SHIFT.forEach(function(x){
@@ -353,7 +370,7 @@ document.getElementById("clear").onclick=function(){
   document.querySelectorAll("#resp input[type=checkbox],#feed input[type=checkbox]").forEach(function(i){i.checked=false});
   out.focus();
 };
-renderMon();renderLines();renderShift();renderCode();renderGcs();renderLimbs();renderResp();renderSelects();
+renderMon();renderLines();renderFoley();renderShift();renderCode();renderGcs();renderLimbs();renderResp();renderSelects();
 </script>
 </body>
 </html>
